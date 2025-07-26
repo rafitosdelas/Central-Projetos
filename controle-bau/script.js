@@ -1,50 +1,38 @@
+// Pega o nome do usuário que fez login no portal
+const loggedInUser = localStorage.getItem('loggedInUser');
+
+// Atualiza a mensagem de boas-vindas
+document.getElementById('bau-welcome-message').textContent = `Registrar Ação (${loggedInUser})`;
+
 // =================================================================
-// PASSO IMPORTANTE: COLE AQUI A CONFIGURAÇÃO DO SEU FIREBASE
+// COLE AQUI A CONFIGURAÇÃO DO SEU FIREBASE
 // =================================================================
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDKMNlXG2WeR6rF4LsDrPgdReGLE1I9d9s",
-  authDomain: "registro-bau.firebaseapp.com",
-  projectId: "registro-bau",
-  storageBucket: "registro-bau.firebasestorage.app",
-  messagingSenderId: "854687018755",
-  appId: "1:854687018755:web:9a0d48b1ec97784a2b8336",
-  measurementId: "G-ZBWW6VSJLB"
+    apiKey: "AIzaSyDKMNlXG2WeR6rF4LsDrPgdReGLE1I9d9s",
+    authDomain: "registro-bau.firebaseapp.com",
+    projectId: "registro-bau",
+    storageBucket: "registro-bau.firebasestorage.app",
+    messagingSenderId: "854687018755",
+    appId: "1:854687018755:web:9a0d48b1ec97784a2b8336"
 };
 
 // Inicializa o Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// VALORES ATUALIZADOS
-const ITEM_VALUES = {
-    "Filé de Peixe-Boi": 4200,
-    "Filé de Jacaré": 5100,
-    "Filé de Tartaruga": 1700,
-};
-
 // Referências para os elementos do HTML
 const itemForm = document.getElementById('item-form');
-const userSelector = document.getElementById('user-selector');
 const actionSelector = document.getElementById('action-selector');
 const itemSelector = document.getElementById('item-selector');
 
-// Elementos do DOM para Biel
+// Elementos do DOM (Adapte se o Tiago também tiver um baú)
 const bielItemsDiv = document.getElementById('biel-items');
-const bielCalculator = {
-    filesValue: document.getElementById('biel-files-value'),
-    grandTotal: document.getElementById('biel-grand-total'),
-    finalWashed: document.getElementById('biel-final-washed-value')
-};
-
-// Elementos do DOM para Rafitos
 const rafitosItemsDiv = document.getElementById('rafitos-items');
-const rafitosCalculator = {
-    filesValue: document.getElementById('rafitos-files-value'),
-    grandTotal: document.getElementById('rafitos-grand-total'),
-    finalWashed: document.getElementById('rafitos-final-washed-value')
-};
 
+// Variáveis para guardar o estado do inventário
+let bielItems = {};
+let rafitosItems = {};
+// let tiagoItems = {}; // Descomente se o Tiago tiver um baú
 
 // Função genérica para lidar com a seleção de botões
 function handleSelector(selectorElement) {
@@ -56,19 +44,15 @@ function handleSelector(selectorElement) {
     });
 }
 
-handleSelector(userSelector);
 handleSelector(actionSelector);
 handleSelector(itemSelector);
 
-// Variáveis para guardar o estado do inventário
-let bielItems = {};
-let rafitosItems = {};
 
-// FUNÇÃO PRINCIPAL: REGISTRAR UMA AÇÃO
+// FUNÇÃO PRINCIPAL: REGISTRAR UMA AÇÃO (MODIFICADA)
 itemForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const user = userSelector.querySelector('.selected').dataset.user;
+    const user = loggedInUser; // USA O UTILIZADOR LOGADO AUTOMATICAMENTE
     const action = actionSelector.querySelector('.selected').dataset.action;
     const itemName = itemSelector.querySelector('.selected').dataset.item;
     const quantity = parseInt(document.getElementById('item-quantity').value);
@@ -79,7 +63,11 @@ itemForm.addEventListener('submit', (e) => {
     }
 
     if (action === 'tirou') {
-        const currentInventory = (user === 'Biel') ? bielItems : rafitosItems;
+        let currentInventory;
+        if (user === 'Biel') currentInventory = bielItems;
+        if (user === 'Rafitos') currentInventory = rafitosItems;
+        // if (user === 'Tiago') currentInventory = tiagoItems;
+
         const availableQuantity = currentInventory[itemName] || 0;
 
         if (availableQuantity < quantity) {
@@ -89,18 +77,18 @@ itemForm.addEventListener('submit', (e) => {
     }
 
     db.collection('transacoes').add({
-        user: user,
+        user: user, // SALVA COM O NOME CORRETO
         action: action,
         itemName: itemName,
         quantity: quantity,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
-        console.log('Transação registrada com sucesso!');
+        console.log('Transação registada com sucesso!');
         document.getElementById('item-quantity').value = 1;
         document.getElementById('item-quantity').focus();
     }).catch((error) => {
-        console.error("Erro ao registrar transação: ", error);
-        alert('Ocorreu um erro ao registrar. Tente novamente.');
+        console.error("Erro ao registar transação: ", error);
+        alert('Ocorreu um erro ao registar. Tente novamente.');
     });
 });
 
@@ -114,63 +102,21 @@ db.collection('transacoes').orderBy('timestamp', 'asc').onSnapshot((snapshot) =>
 
     snapshot.docs.forEach(doc => {
         const transacao = doc.data();
-        const itemsList = transacao.user === 'Biel' ? bielItems : rafitosItems;
-        const currentQty = itemsList[transacao.itemName] || 0;
-
-        if (transacao.action === 'colocou') {
-            itemsList[transacao.itemName] = currentQty + transacao.quantity;
-        } else {
-            itemsList[transacao.itemName] = currentQty - transacao.quantity;
+        let itemsList;
+        if (transacao.user === 'Biel') itemsList = bielItems;
+        if (transacao.user === 'Rafitos') itemsList = rafitosItems;
+        // if (transacao.user === 'Tiago') itemsList = tiagoItems;
+        
+        if (itemsList) {
+            const currentQty = itemsList[transacao.itemName] || 0;
+            if (transacao.action === 'colocou') {
+                itemsList[transacao.itemName] = currentQty + transacao.quantity;
+            } else {
+                itemsList[transacao.itemName] = currentQty - transacao.quantity;
+            }
         }
     });
-
-    function displayItems(player, playerItems, divElement) {
-        Object.keys(playerItems).sort().forEach(itemName => {
-            const quantity = playerItems[itemName];
-            if (quantity > 0) {
-                const itemEntry = document.createElement('p');
-                itemEntry.textContent = `${quantity}x ${itemName}`;
-                itemEntry.addEventListener('click', () => {
-                    userSelector.querySelectorAll('button').forEach(btn => btn.classList.toggle('selected', btn.dataset.user === player));
-                    actionSelector.querySelector('[data-action="tirou"]').classList.add('selected');
-                    actionSelector.querySelector('[data-action="colocou"]').classList.remove('selected');
-                    itemSelector.querySelectorAll('button').forEach(btn => btn.classList.toggle('selected', btn.dataset.item === itemName));
-                    document.getElementById('item-quantity').value = quantity;
-                    document.getElementById('item-quantity').focus();
-                });
-                divElement.appendChild(itemEntry);
-            }
-        });
-    }
-
-    function updatePlayerCalculator(playerItems, calculatorElements) {
-        let grossFilesValue = 0;
-        const dirtyMoneyValue = playerItems['Dinheiro Sujo'] || 0;
-
-        // Calcula o valor bruto dos filés
-        for (const itemName in playerItems) {
-            if (ITEM_VALUES[itemName]) {
-                grossFilesValue += playerItems[itemName] * ITEM_VALUES[itemName];
-            }
-        }
-        
-        // O valor total ANTES de qualquer lavagem
-        const totalGrossValue = grossFilesValue + dirtyMoneyValue;
-
-        // O valor final DEPOIS de aplicar a taxa de 15% sobre TUDO
-        const finalWashedValue = totalGrossValue * 0.85;
-
-        const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-        // Atualiza a interface
-        calculatorElements.filesValue.textContent = formatCurrency(grossFilesValue);
-        calculatorElements.grandTotal.textContent = formatCurrency(totalGrossValue);
-        calculatorElements.finalWashed.textContent = formatCurrency(finalWashedValue);
-    }
-
-    displayItems('Biel', bielItems, bielItemsDiv);
-    displayItems('Rafitos', rafitosItems, rafitosItemsDiv);
     
-    updatePlayerCalculator(bielItems, bielCalculator);
-    updatePlayerCalculator(rafitosItems, rafitosCalculator);
+    // As suas funções displayItems e updatePlayerCalculator podem continuar como estavam,
+    // mas lembre-se de chamá-las para o Tiago se ele tiver um inventário visual.
 });

@@ -8,14 +8,14 @@
 </head>
 <body>
 
-    <div id="password-overlay" class="modal-overlay">
+    <div id="login-overlay" class="modal-overlay">
         <div class="modal-content">
             <h1>Acesso Restrito</h1>
             <p class="slogan">Só quem se arrisca merece viver o extraordinário</p>
-            <form id="password-form">
+            <form id="pin-form">
                 <div class="input-group">
-                    <label for="secret-password">Senha de Acesso</label>
-                    <input type="password" id="secret-password" required>
+                    <label for="pin-input">PIN de Acesso</label>
+                    <input type="password" id="pin-input" required>
                 </div>
                 <button type="submit">Entrar</button>
                 <p id="error-message" class="error-message"></p>
@@ -29,6 +29,10 @@
             <div class="header-content">
                 <div class="header-title">
                     <h1>Central de Projetos</h1>
+                    <p id="welcome-message"></p>
+                </div>
+                 <div class="header-actions">
+                    <button id="logout-button">Sair</button>
                 </div>
             </div>
         </header>

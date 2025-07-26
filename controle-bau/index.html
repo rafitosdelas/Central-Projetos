@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Baú</title> <link rel="stylesheet" href="style.css">
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="../auth-check.js"></script> </head>>
+    <title>Controle de Baú</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="../auth-check.js"></script>
+</head>
+<body>
 
     <div class="container">
-
         <div class="column main-column">
-            <h2>Registrar</h2>
+            <h2 id="bau-welcome-message">Registrar Ação</h2>
             <form id="item-form">
-                <label>Quem:</label>
-                <div class="button-group" id="user-selector">
-                    <button type="button" class="btn-selector selected" data-user="Biel">Biel</button>
-                    <button type="button" class="btn-selector" data-user="Rafitos">Rafitos</button>
-                </div>
-
+                
                 <label>Ação:</label>
                 <div class="button-group" id="action-selector">
                     <button type="button" class="btn-selector selected" data-action="colocou">Colocando</button>
@@ -38,11 +32,8 @@
                     </div>
                 </div>
 
-
                 <label for="item-quantity">Quantidade:</label>
-                <div class="item-input-container">
-                    <input type="number" id="item-quantity" value="1" min="1">
-                </div>
+                <input type="number" id="item-quantity" value="1" min="1">
 
                 <button type="submit">Registrar Ação</button>
             </form>
@@ -51,43 +42,13 @@
         <div class="column users-column">
             <div class="user-box">
                 <h3>Biel</h3>
-                <div id="biel-items" class="log-box">
-                    </div>
-                <div class="calculator-box">
-                     <div class="calc-item">
-                        <span>Valor dos Filés:</span>
-                        <span id="biel-files-value">R$ 0,00</span>
-                    </div>
-                    <div class="calc-item">
-                        <span>Total com Dinheiro Sujo:</span>
-                        <span id="biel-grand-total">R$ 0,00</span>
-                    </div>
-                    <div class="calc-item total">
-                        <span>Total Lavado (-15%):</span>
-                        <span id="biel-final-washed-value">R$ 0,00</span>
-                    </div>
-                </div>
+                <div id="biel-items" class="log-box"></div>
             </div>
              <div class="user-box">
                 <h3>Rafitos</h3>
-                <div id="rafitos-items" class="log-box">
-                    </div>
-                 <div class="calculator-box">
-                    <div class="calc-item">
-                        <span>Valor dos Filés:</span>
-                        <span id="rafitos-files-value">R$ 0,00</span>
-                    </div>
-                    <div class="calc-item">
-                        <span>Total com Dinheiro Sujo:</span>
-                        <span id="rafitos-grand-total">R$ 0,00</span>
-                    </div>
-                    <div class="calc-item total">
-                        <span>Total Lavado (-15%):</span>
-                        <span id="rafitos-final-washed-value">R$ 0,00</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <div id="rafitos-items" class="log-box"></div>
+             </div>
+             </div>
 
     </div>
 
