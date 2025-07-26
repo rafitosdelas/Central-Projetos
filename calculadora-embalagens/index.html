@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Embalagens</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="column main-column">
+            <h2>Calcular Embalagens Necessárias</h2>
+            <p class="slogan">Só quem se arrisca merece viver o extraordinário</p>
+            
+            <div class="info-box">
+                <p><strong>Regras do Cálculo:</strong></p>
+                <p>Cada <strong>1</strong> unidade de droga pura rende <strong>5</strong> unidades para venda.</p>
+                <p>Cada embalagem (seja pino, ziplock ou bicarbonato) custa <strong>R$ 5,00</strong>.</p>
+            </div>
+
+            <form id="packaging-form">
+                <label for="maconha">Maconha (Embalagem: Ziplock):</label>
+                <input type="number" id="maconha" placeholder="0" min="0">
+
+                <label for="crack">Crack (Embalagem: Bicarbonato):</label>
+                <input type="number" id="crack" placeholder="0" min="0">
+                
+                <label for="cocaina">Cocaína (Embalagem: Pino):</label>
+                <input type="number" id="cocaina" placeholder="0" min="0">
+
+                <label for="metanfetamina">Metanfetamina (Embalagem: Ziplock):</label>
+                <input type="number" id="metanfetamina" placeholder="0" min="0">
+            </form>
+             <button id="save-calculation">Salvar e Registrar Necessidade</button>
+        </div>
+
+        <div class="column result-column">
+            <h3>Necessidade de Compra</h3>
+            <div class="calculator-box">
+                 <div class="calc-item">
+                    <span>Pinos (Cocaína):</span>
+                    <span id="pinos-needed">0</span>
+                </div>
+                 <div class="calc-item">
+                    <span>Ziplocks (Maconha/Meta):</span>
+                    <span id="ziplocks-needed">0</span>
+                </div>
+                <div class="calc-item">
+                    <span>Bicarbonato (Crack):</span>
+                    <span id="bicarbonato-needed">0</span>
+                </div>
+                <div class="calc-item total">
+                    <span>Custo Total:</span>
+                    <span id="total-cost">R$ 0,00</span>
+                </div>
+            </div>
+            
+            <div class="history-box">
+                <h3>Registros Salvos (Visível para todos)</h3>
+                <div id="history-log" class="log-box">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
