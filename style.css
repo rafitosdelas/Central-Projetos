@@ -1,0 +1,136 @@
+/* Configurações gerais e tema escuro */
+html, body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+}
+
+#page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    transition: filter 0.3s ease-in-out;
+}
+
+#page-container.blurred {
+    filter: blur(5px) brightness(0.7);
+    pointer-events: none; /* Impede cliques no fundo */
+}
+
+
+/* Cabeçalho */
+.main-header {
+    margin-bottom: 50px;
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-title h1 {
+    font-size: 48px;
+    color: #cccccc;
+    margin: 0;
+}
+.header-title p {
+    margin: 5px 0 0;
+    color: #a0a0a0;
+}
+
+.header-actions button {
+    background: #0e639c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+#logout-button {
+    background: #d16a6a;
+}
+
+
+/* Grid de Projetos */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+.logged-out-message {
+    grid-column: 1 / -1; /* Ocupa a largura toda */
+    color: #777;
+    font-size: 22px;
+}
+
+.project-card {
+    background-color: #252526;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ... (resto do estilo do project-card e btn-enter do código anterior) ... */
+.project-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); }
+.project-card h2 { color: #cccccc; border-bottom: 1px solid #0e9c8c; padding-bottom: 15px; margin-top: 0; margin-bottom: 20px; width: 100%; }
+.project-card p { color: #a0a0a0; flex-grow: 1; margin-bottom: 30px; }
+.btn-enter { display: inline-block; padding: 15px 30px; background-color: #0e639c; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold; transition: background-color 0.2s; }
+.btn-enter:hover { background-color: #157dc5; }
+
+
+/* ================== */
+/* ESTILOS DO MODAL   */
+/* ================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #252526;
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid #3a3a3a;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #777;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.modal-content h1 { text-align: center; margin-bottom: 5px; }
+.modal-content .slogan { text-align: center; margin-top: 0; margin-bottom: 30px; font-size: 16px; color: #a0a0a0; }
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; color: #a0a0a0; margin-bottom: 5px; }
+.input-group input { width: 100%; padding: 12px; border: 1px solid #3a3a3a; border-radius: 5px; background-color: #333333; color: #d4d4d4; box-sizing: border-box; font-size: 16px; }
+.modal-content button[type="submit"] { width: 100%; padding: 15px; background-color: #0e639c; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
+.error-message { color: #d16a6a; text-align: center; margin-top: 15px; height: 20px; }
+
+.hidden {
+    display: none;
+}
