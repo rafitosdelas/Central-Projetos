@@ -25,12 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const CONVERSION_RATE = 5; 
     const PACKAGE_COST = 5;
     const MAX_BUY_AMOUNT = 50;
+    const PACKAGE_WEIGHT = 0.01; // <--- NOVA CONSTANTE
 
     // --- Referências do DOM ---
     const inputs = { maconha: document.getElementById('maconha'), crack: document.getElementById('crack'), cocaina: document.getElementById('cocaina'), metanfetamina: document.getElementById('metanfetamina') };
     const neededSpans = { pinos: document.getElementById('pinos-needed'), ziplocks: document.getElementById('ziplocks-needed'), bicarbonato: document.getElementById('bicarbonato-needed') };
     const clicksSpans = { pinos: document.getElementById('pinos-clicks'), ziplocks: document.getElementById('ziplocks-clicks'), bicarbonato: document.getElementById('bicarbonato-clicks') };
     const totalCostSpan = document.getElementById('total-cost');
+    const totalWeightSpan = document.getElementById('total-weight'); // <--- NOVA REFERÊNCIA
     const saveButton = document.getElementById('save-calculation');
     const historyLogDiv = document.getElementById('history-log');
     const detailsBox = document.getElementById('details-box');
@@ -54,16 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
             ziplocks: (quantities.maconha + quantities.metanfetamina) * CONVERSION_RATE,
             bicarbonato: quantities.crack * CONVERSION_RATE
         };
-        const totalCost = (needed.pinos + needed.ziplocks + needed.bicarbonato) * PACKAGE_COST;
+        const totalPackages = needed.pinos + needed.ziplocks + needed.bicarbonato;
+        const totalCost = totalPackages * PACKAGE_COST;
+        const totalWeight = totalPackages * PACKAGE_WEIGHT; // <--- CÁLCULO DO PESO
 
+        // Atualiza a interface
         neededSpans.pinos.textContent = needed.pinos;
         neededSpans.ziplocks.textContent = needed.ziplocks;
         neededSpans.bicarbonato.textContent = needed.bicarbonato;
+        
         clicksSpans.pinos.textContent = calculateClicks(needed.pinos);
         clicksSpans.ziplocks.textContent = calculateClicks(needed.ziplocks);
         clicksSpans.bicarbonato.textContent = calculateClicks(needed.bicarbonato);
+
         totalCostSpan.textContent = totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        saveButton.disabled = (needed.pinos + needed.ziplocks + needed.bicarbonato) === 0;
+        totalWeightSpan.textContent = `${totalWeight.toFixed(2)} kg`; // <--- ATUALIZA O PESO NA TELA
+
+        saveButton.disabled = totalPackages === 0;
     }
 
     // --- Event Listeners ---
@@ -105,9 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 historyLogDiv.querySelectorAll('p').forEach(p => p.classList.remove('selected'));
                 entry.classList.add('selected');
                 
+                const totalWeightOfEntry = totalPackages * PACKAGE_WEIGHT; // <--- CÁLCULO DO PESO PARA O HISTÓRICO
                 detailsContent.innerHTML = `
                     <p><strong>Registado por:</strong> ${data.registradoPor || 'N/A'}</p>
                     <p><strong>Data:</strong> ${data.timestamp?.toDate().toLocaleString('pt-BR')}</p>
+                    <p><strong>Peso Total:</strong> ${totalWeightOfEntry.toFixed(2)} kg</p>
                     <p><strong>Custo Total:</strong> ${data.totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     <hr>
                     <p><strong>Pinos:</strong> ${data.needed.pinos} ${calculateClicks(data.needed.pinos)}</p>

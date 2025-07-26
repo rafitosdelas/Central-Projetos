@@ -7,14 +7,13 @@ html, body {
     color: #d4d4d4;
 }
 
-/* MODIFICAÇÃO: Adicionado espaço no topo para o botão de voltar */
 .container {
     display: flex;
     gap: 25px;
-    max-width: 1600px;
+    max-width: 1600px; /* Aumentei a largura máxima para acomodar as 3 colunas */
     margin: auto;
     padding: 20px;
-    padding-top: 70px; /* <--- ADICIONADO ESPAÇAMENTO AQUI */
+    padding-top: 70px;
     box-sizing: border-box;
 }
 
@@ -93,9 +92,16 @@ h2, h3 {
     text-align: right;
 }
 
+/* NOVO ESTILO PARA O PESO */
+.calc-item.total-weight span:last-child {
+    color: #e5c07b; /* Cor dourada/amarela para diferenciar */
+    font-weight: bold;
+}
+
 .calc-item.total span:last-child {
     color: #73c48f;
     font-size: 20px;
+    font-weight: bold;
 }
 
 .history-box {
@@ -145,31 +151,11 @@ h2, h3 {
 
 #save-calculation:hover { background-color: #157dc5; }
 
-/* MODIFICAÇÃO: ESTILO PARA O BOTÃO DE VOLTAR (ÍCONE) */
+/* ESTILO PARA O BOTÃO DE VOLTAR (ÍCONE) */
 .back-to-portal-button {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 100;
-    background-color: #252526;
-    color: #d4d4d4;
-    border: 1px solid #3a3a3a;
-    border-radius: 50%; /* Deixa o botão redondo */
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    text-decoration: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    transition: background-color 0.2s, transform 0.2s;
+    position: fixed; top: 15px; left: 15px; z-index: 100; background-color: #252526; color: #d4d4d4; border: 1px solid #3a3a3a; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 20px; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: background-color 0.2s, transform 0.2s;
 }
-
-.back-to-portal-button:hover {
-    background-color: #3a3a3a;
-    transform: scale(1.1);
-}
+.back-to-portal-button:hover { background-color: #3a3a3a; transform: scale(1.1); }
 
 /* ESTILO PARA A CAIXA DE DETALHES */
 .details-box {
