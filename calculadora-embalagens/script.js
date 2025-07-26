@@ -3,15 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const loggedInUser = localStorage.getItem('loggedInUser');
     
     // --- Referências do DOM ---
-    const inputs = { maconha: document.getElementById('maconha'), crack: document.getElementById('crack'), cocaina: document.getElementById('cocaina'), metanfetamina: document.getElementById('metanfetamina') };
+    const inputs = { 
+        peDeMaconha: document.getElementById('pe-de-maconha'), 
+        pastaBase: document.getElementById('pasta-base'), 
+        plantaCoca: document.getElementById('planta-coca'), 
+        anfetamina: document.getElementById('anfetamina') 
+    };
     const saveButton = document.getElementById('save-calculation');
-    const neededSpans = { pinos: document.getElementById('pinos-needed'), ziplocks: document.getElementById('ziplocks-needed'), bicarbonato: document.getElementById('bicarbonato-needed') };
-    const clicksSpans = { pinos: document.getElementById('pinos-clicks'), ziplocks: document.getElementById('ziplocks-clicks'), bicarbonato: document.getElementById('bicarbonato-clicks') };
-    const totalCostSpan = document.getElementById('total-cost');
-    const totalWeightSpan = document.getElementById('total-weight');
-    const historyLogDiv = document.getElementById('history-log');
-    const detailsBox = document.getElementById('details-box');
-    const detailsContent = document.getElementById('details-content');
     
     if (loggedInUser) {
         let welcomeText = `Calcular Embalagens (${loggedInUser})`;
@@ -46,7 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const PACKAGE_COST = 5;
     const MAX_BUY_AMOUNT = 50;
     const PACKAGE_WEIGHT = 0.01;
+    const FINAL_PRODUCT_PRICE = 98; // <--- NOVA CONSTANTE DE PREÇO
 
+    // --- Mais Referências do DOM ---
+    const neededSpans = { pinos: document.getElementById('pinos-needed'), ziplocks: document.getElementById('ziplocks-needed'), bicarbonato: document.getElementById('bicarbonato-needed') };
+    const clicksSpans = { pinos: document.getElementById('pinos-clicks'), ziplocks: document.getElementById('ziplocks-clicks'), bicarbonato: document.getElementById('bicarbonato-clicks') };
+    const totalCostSpan = document.getElementById('total-cost');
+    const totalWeightSpan = document.getElementById('total-weight');
+    const estimatedValueSpan = document.getElementById('estimated-value'); // <--- NOVA REFERÊNCIA
+    const historyLogDiv = document.getElementById('history-log');
+    const detailsBox = document.getElementById('details-box');
+    const detailsContent = document.getElementById('details-content');
+    
     // --- Funções ---
     function calculateClicks(total) {
         if (total === 0) return '';
@@ -59,24 +68,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function calculatePackaging() {
-        const quantities = { maconha: parseInt(inputs.maconha.value) || 0, crack: parseInt(inputs.crack.value) || 0, cocaina: parseInt(inputs.cocaina.value) || 0, metanfetamina: parseInt(inputs.metanfetamina.value) || 0 };
+        const quantities = { 
+            peDeMaconha: parseInt(inputs.peDeMaconha.value) || 0, 
+            pastaBase: parseInt(inputs.pastaBase.value) || 0, 
+            plantaCoca: parseInt(inputs.plantaCoca.value) || 0, 
+            anfetamina: parseInt(inputs.anfetamina.value) || 0 
+        };
         const needed = {
-            pinos: quantities.cocaina * CONVERSION_RATE,
-            ziplocks: (quantities.maconha + quantities.metanfetamina) * CONVERSION_RATE,
-            bicarbonato: quantities.crack * CONVERSION_RATE
+            pinos: quantities.plantaCoca * CONVERSION_RATE,
+            ziplocks: (quantities.peDeMaconha + quantities.anfetamina) * CONVERSION_RATE,
+            bicarbonato: quantities.pastaBase * CONVERSION_RATE
         };
         const totalPackages = needed.pinos + needed.ziplocks + needed.bicarbonato;
         const totalCost = totalPackages * PACKAGE_COST;
         const totalWeight = totalPackages * PACKAGE_WEIGHT;
+        const estimatedValue = totalPackages * FINAL_PRODUCT_PRICE; // <--- CÁLCULO DO VALOR
 
+        // Atualiza a interface
         neededSpans.pinos.textContent = needed.pinos;
         neededSpans.ziplocks.textContent = needed.ziplocks;
         neededSpans.bicarbonato.textContent = needed.bicarbonato;
+        
         clicksSpans.pinos.textContent = calculateClicks(needed.pinos);
         clicksSpans.ziplocks.textContent = calculateClicks(needed.ziplocks);
         clicksSpans.bicarbonato.textContent = calculateClicks(needed.bicarbonato);
+
         totalCostSpan.textContent = totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         totalWeightSpan.textContent = `${totalWeight.toFixed(2)} kg`;
+        estimatedValueSpan.textContent = estimatedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); // <--- ATUALIZA O VALOR
+
         if (loggedInUser !== 'Visitante') {
             saveButton.disabled = totalPackages === 0;
         }
@@ -86,10 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.values(inputs).forEach(input => input.addEventListener('input', calculatePackaging));
 
     saveButton.addEventListener('click', () => {
-        const quantities = { maconha: parseInt(inputs.maconha.value) || 0, crack: parseInt(inputs.crack.value) || 0, cocaina: parseInt(inputs.cocaina.value) || 0, metanfetamina: parseInt(inputs.metanfetamina.value) || 0 };
+        const quantities = { peDeMaconha: parseInt(inputs.peDeMaconha.value) || 0, pastaBase: parseInt(inputs.pastaBase.value) || 0, plantaCoca: parseInt(inputs.plantaCoca.value) || 0, anfetamina: parseInt(inputs.anfetamina.value) || 0 };
         if (Object.values(quantities).reduce((a, b) => a + b, 0) === 0) return;
 
-        const needed = { pinos: quantities.cocaina * CONVERSION_RATE, ziplocks: (quantities.maconha + quantities.metanfetamina) * CONVERSION_RATE, bicarbonato: quantities.crack * CONVERSION_RATE };
+        const needed = { pinos: quantities.plantaCoca * CONVERSION_RATE, ziplocks: (quantities.peDeMaconha + quantities.anfetamina) * CONVERSION_RATE, bicarbonato: quantities.pastaBase * CONVERSION_RATE };
         const totalCost = (needed.pinos + needed.ziplocks + needed.bicarbonato) * PACKAGE_COST;
 
         db.collection('necessidade_embalagens').add({
@@ -122,11 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 entry.classList.add('selected');
                 
                 const totalWeightOfEntry = totalPackages * PACKAGE_WEIGHT;
+                const estimatedValueOfEntry = totalPackages * FINAL_PRODUCT_PRICE; // <--- CÁLCULO PARA O HISTÓRICO
                 detailsContent.innerHTML = `
                     <p><strong>Registado por:</strong> ${data.registradoPor || 'N/A'}</p>
                     <p><strong>Data:</strong> ${data.timestamp?.toDate().toLocaleString('pt-BR')}</p>
+                    <p><strong>Valor de Venda:</strong> ${estimatedValueOfEntry.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    <p><strong>Custo Embalagens:</strong> ${data.totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     <p><strong>Peso Total:</strong> ${totalWeightOfEntry.toFixed(2)} kg</p>
-                    <p><strong>Custo Total:</strong> ${data.totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     <hr>
                     <p><strong>Pinos:</strong> ${data.needed.pinos} ${calculateClicks(data.needed.pinos)}</p>
                     <p><strong>Ziplocks:</strong> ${data.needed.ziplocks} ${calculateClicks(data.needed.ziplocks)}</p>
