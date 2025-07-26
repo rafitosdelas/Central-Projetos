@@ -10,7 +10,7 @@ html, body {
 .container {
     display: flex;
     gap: 25px;
-    max-width: 1600px; /* Aumentei a largura máxima para acomodar as 3 colunas */
+    max-width: 1600px;
     margin: auto;
     padding: 20px;
     padding-top: 70px;
@@ -26,7 +26,6 @@ html, body {
     flex-direction: column;
 }
 
-/* NOVOS TAMANHOS PARA AS COLUNAS */
 .details-column { flex: 1.2; }
 .main-column { flex: 1; }
 .result-column { flex: 1.2; }
@@ -92,14 +91,19 @@ h2, h3 {
     text-align: right;
 }
 
-/* NOVO ESTILO PARA O PESO */
 .calc-item.total-weight span:last-child {
-    color: #e5c07b; /* Cor dourada/amarela para diferenciar */
+    color: #e5c07b;
     font-weight: bold;
 }
 
 .calc-item.total span:last-child {
-    color: #73c48f;
+    color: #d16a6a; /* Cor vermelha para o custo */
+    font-weight: bold;
+}
+
+/* NOVO ESTILO PARA O VALOR ESTIMADO */
+.calc-item.estimated-value span:last-child {
+    color: #73c48f; /* Cor verde para o lucro */
     font-size: 20px;
     font-weight: bold;
 }
