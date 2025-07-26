@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const userPins = {
         "4150": "Rafitos",
         "6415": "Biel",
-        "4318": "Tiago"
+        "4318": "Tiago",
+        "1111": "Visitante" // NOVO UTILIZADOR CONVIDADO
     };
 
     // =======================================================
@@ -15,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const accessRules = {
         "Rafitos": ["Controle de Baú", "Calculadora de Embalagens"],
         "Biel": ["Controle de Baú", "Calculadora de Embalagens"],
-        "Tiago": ["Calculadora de Embalagens"]
+        "Tiago": ["Calculadora de Embalagens"],
+        "Visitante": ["Controle de Baú", "Calculadora de Embalagens"] // PODE VER TUDO
     };
 
     // Detalhes dos projetos
