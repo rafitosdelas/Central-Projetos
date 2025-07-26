@@ -1,12 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =======================================================
-    //   DEFINA OS PINS E NOMES DE CADA USUÁRIO AQUI
+    //   SENHAS ATUALIZADAS
     // =======================================================
     const userPins = {
-        "123": "Rafitos",
-        "124": "Biel",
-        "125": "Tiago"
+        "4150": "Rafitos",
+        "6415": "Biel",
+        "4318": "Tiago"
+    };
+
+    // =======================================================
+    //   LISTA DE ACESSO (QUEM PODE VER O QUÊ)
+    // =======================================================
+    const accessRules = {
+        "Rafitos": ["Controle de Baú", "Calculadora de Embalagens"],
+        "Biel": ["Controle de Baú", "Calculadora de Embalagens"],
+        "Tiago": ["Calculadora de Embalagens"]
+    };
+
+    // Detalhes dos projetos
+    const projectDetails = {
+        'Controle de Baú': {
+            description: 'Sistema para registar a entrada e saída de itens valiosos.',
+            url: './controle-bau/index.html'
+        },
+        'Calculadora de Embalagens': {
+            description: 'Calcula a necessidade de compra de embalagens e o custo.',
+            url: './calculadora-embalagens/index.html'
+        }
     };
 
     // --- Elementos da Página ---
@@ -17,10 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessage = document.getElementById('error-message');
     const logoutButton = document.getElementById('logout-button');
     const welcomeMessage = document.getElementById('welcome-message');
+    const projectsGrid = document.querySelector('.projects-grid');
 
     // --- Lógica Principal ---
     
-    // 1. Checa se já existe um "crachá" com o nome do usuário
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
         showPortal(loggedInUser);
@@ -28,27 +49,22 @@ document.addEventListener('DOMContentLoaded', () => {
         showLogin();
     }
 
-    // 2. Lógica do Formulário de PIN
     pinForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const pin = pinInput.value;
-        const username = userPins[pin]; // Procura o nome correspondente ao PIN
+        const username = userPins[pin];
 
         if (username) {
-            // Sucesso! Salva o NOME do usuário como "crachá"
             localStorage.setItem('loggedInUser', username);
             showPortal(username);
         } else {
-            // Erro
             errorMessage.textContent = 'PIN incorreto.';
             pinInput.value = '';
             pinInput.focus();
         }
     });
 
-    // 3. Lógica do Botão de Sair
     logoutButton.addEventListener('click', () => {
-        // Remove o "crachá" e recarrega a página
         localStorage.removeItem('loggedInUser');
         window.location.reload();
     });
@@ -59,6 +75,23 @@ document.addEventListener('DOMContentLoaded', () => {
         loginOverlay.classList.add('hidden');
         pageContainer.classList.remove('hidden');
         welcomeMessage.textContent = `Logado como: ${username}`;
+        
+        projectsGrid.innerHTML = '';
+        const allowedProjects = accessRules[username] || [];
+
+        allowedProjects.forEach(projectTitle => {
+            const project = projectDetails[projectTitle];
+            if (project) {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <h2>${projectTitle}</h2>
+                    <p>${project.description}</p>
+                    <a href="${project.url}" class="btn-enter">Entrar no Projeto</a>
+                `;
+                projectsGrid.appendChild(card);
+            }
+        });
     }
 
     function showLogin() {

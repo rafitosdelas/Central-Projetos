@@ -7,12 +7,14 @@ html, body {
     color: #d4d4d4;
 }
 
+/* MODIFICAÇÃO: Adicionado espaço no topo para o botão de voltar */
 .container {
     display: flex;
     gap: 25px;
     max-width: 1400px;
     margin: auto;
     padding: 20px;
+    padding-top: 70px; /* <--- ADICIONADO ESPAÇAMENTO AQUI */
     height: 100%;
     box-sizing: border-box;
 }
@@ -63,10 +65,6 @@ h2, h3 {
     font-size: 16px;
 }
 
-#item-quantity {
-    flex-grow: 1;
-}
-
 #item-form button[type="submit"] {
     padding: 15px;
     background-color: #0e639c;
@@ -88,14 +86,10 @@ h2, h3 {
     display: flex;
     gap: 10px;
 }
-.button-group.wrap {
-    flex-wrap: wrap;
-}
 
-/* NOVO ESTILO PARA O BOTÃO INFERIOR */
 .button-group-single {
     display: flex;
-    margin-top: 10px; /* Espaçamento adicionado */
+    margin-top: 10px;
 }
 
 .btn-selector {
@@ -122,19 +116,14 @@ h2, h3 {
     padding: 15px;
     flex-grow: 1;
     overflow-y: auto;
-    min-height: 100px; /* Garante uma altura mínima */
+    min-height: 100px;
 }
 
 .log-box p {
-    cursor: pointer;
     padding: 8px;
     border-radius: 3px;
     transition: background-color 0.2s;
     margin: 4px 0;
-}
-
-.log-box p:hover {
-    background-color: #3a3a3a;
 }
 
 .user-box {
@@ -148,13 +137,12 @@ h2, h3 {
     padding: 20px;
 }
 
-/* --- ESTILOS PARA A CALCULADORA DENTRO DO CARD --- */
 .calculator-box {
     display: flex;
     flex-direction: column;
     gap: 8px;
     font-size: 16px;
-    margin-top: 15px; /* Espaço entre a lista de itens e a calculadora */
+    margin-top: 15px;
     border-top: 1px solid #3a3a3a;
     padding-top: 15px;
 }
@@ -173,11 +161,33 @@ h2, h3 {
     font-weight: bold;
 }
 
-.calc-item .deduction {
-    color: #d16a6a;
-}
-
 .calc-item.total span:last-child {
     color: #73c48f;
     font-size: 18px;
+}
+
+/* MODIFICAÇÃO: ESTILO PARA O BOTÃO DE VOLTAR (ÍCONE) */
+.back-to-portal-button {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 100;
+    background-color: #252526;
+    color: #d4d4d4;
+    border: 1px solid #3a3a3a;
+    border-radius: 50%; /* Deixa o botão redondo */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.back-to-portal-button:hover {
+    background-color: #3a3a3a;
+    transform: scale(1.1);
 }

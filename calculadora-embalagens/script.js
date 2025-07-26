@@ -1,138 +1,124 @@
-// =================================================================
-// PASSO IMPORTANTE: COLE AQUI A CONFIGURAÇÃO DO SEU FIREBASE
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDKMNlXG2WeR6rF4LsDrPgdReGLE1I9d9s",
-  authDomain: "registro-bau.firebaseapp.com",
-  projectId: "registro-bau",
-  storageBucket: "registro-bau.firebasestorage.app",
-  messagingSenderId: "854687018755",
-  appId: "1:854687018755:web:9a0d48b1ec97784a2b8336",
-  measurementId: "G-ZBWW6VSJLB"
-};
-
-// Inicializa o Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// --- CONSTANTES DO JOGO ---
-const CONVERSION_RATE = 5; 
-const PACKAGE_COST = 5;   
-
-// --- REFERÊNCIAS DO HTML ---
-const inputs = {
-    maconha: document.getElementById('maconha'),
-    crack: document.getElementById('crack'),
-    cocaina: document.getElementById('cocaina'),
-    metanfetamina: document.getElementById('metanfetamina')
-};
-
-const neededSpans = {
-    pinos: document.getElementById('pinos-needed'),
-    ziplocks: document.getElementById('ziplocks-needed'),
-    bicarbonato: document.getElementById('bicarbonato-needed')
-};
-
-const totalCostSpan = document.getElementById('total-cost');
-const saveButton = document.getElementById('save-calculation');
-const historyLogDiv = document.getElementById('history-log');
-
-// --- FUNÇÃO DE CÁLCULO ---
-function calculatePackaging() {
-    const quantities = {
-        maconha: parseInt(inputs.maconha.value) || 0,
-        crack: parseInt(inputs.crack.value) || 0,
-        cocaina: parseInt(inputs.cocaina.value) || 0,
-        metanfetamina: parseInt(inputs.metanfetamina.value) || 0
-    };
-
-    const totalPureDrugs = Object.values(quantities).reduce((sum, qty) => sum + qty, 0);
-
-    // Calcula a necessidade por tipo de embalagem
-    const needed = {
-        pinos: quantities.cocaina * CONVERSION_RATE,
-        ziplocks: (quantities.maconha + quantities.metanfetamina) * CONVERSION_RATE,
-        bicarbonato: quantities.crack * CONVERSION_RATE
-    };
-    
-    // Calcula o custo total
-    const totalPackagesNeeded = needed.pinos + needed.ziplocks + needed.bicarbonato;
-    const totalCost = totalPackagesNeeded * PACKAGE_COST;
-
-    // Atualiza os valores na tela
-    neededSpans.pinos.textContent = needed.pinos;
-    neededSpans.ziplocks.textContent = needed.ziplocks;
-    neededSpans.bicarbonato.textContent = needed.bicarbonato;
-    totalCostSpan.textContent = totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    
-    saveButton.disabled = totalPureDrugs === 0;
-}
-
-// --- EVENT LISTENERS ---
-Object.values(inputs).forEach(input => {
-    input.addEventListener('input', calculatePackaging);
-});
-
-saveButton.addEventListener('click', () => {
-    const quantities = {
-        maconha: parseInt(inputs.maconha.value) || 0,
-        crack: parseInt(inputs.crack.value) || 0,
-        cocaina: parseInt(inputs.cocaina.value) || 0,
-        metanfetamina: parseInt(inputs.metanfetamina.value) || 0
-    };
-
-    const totalPureDrugs = Object.values(quantities).reduce((sum, qty) => sum + qty, 0);
-
-    if (totalPureDrugs === 0) {
-        alert("Nenhum valor para salvar.");
-        return;
+document.addEventListener('DOMContentLoaded', () => {
+    // Pega o nome do utilizador que fez login no portal
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (loggedInUser) {
+        document.getElementById('calculator-welcome-message').textContent = `Calcular Embalagens (${loggedInUser})`;
     }
 
-    const needed = {
-        pinos: quantities.cocaina * CONVERSION_RATE,
-        ziplocks: (quantities.maconha + quantities.metanfetamina) * CONVERSION_RATE,
-        bicarbonato: quantities.crack * CONVERSION_RATE
+    // =================================================================
+    // CONFIGURAÇÃO DO FIREBASE (NÃO PRECISA MEXER)
+    // =================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDKMNlXG2WeR6rF4LsDrPgdReGLE1I9d9s",
+      authDomain: "registro-bau.firebaseapp.com",
+      projectId: "registro-bau",
+      storageBucket: "registro-bau.firebasestorage.app",
+      messagingSenderId: "854687018755",
+      appId: "1:854687018755:web:9a0d48b1ec97784a2b8336"
     };
+
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // --- Constantes ---
+    const CONVERSION_RATE = 5; 
+    const PACKAGE_COST = 5;
+    const MAX_BUY_AMOUNT = 50;
+
+    // --- Referências do DOM ---
+    const inputs = { maconha: document.getElementById('maconha'), crack: document.getElementById('crack'), cocaina: document.getElementById('cocaina'), metanfetamina: document.getElementById('metanfetamina') };
+    const neededSpans = { pinos: document.getElementById('pinos-needed'), ziplocks: document.getElementById('ziplocks-needed'), bicarbonato: document.getElementById('bicarbonato-needed') };
+    const clicksSpans = { pinos: document.getElementById('pinos-clicks'), ziplocks: document.getElementById('ziplocks-clicks'), bicarbonato: document.getElementById('bicarbonato-clicks') };
+    const totalCostSpan = document.getElementById('total-cost');
+    const saveButton = document.getElementById('save-calculation');
+    const historyLogDiv = document.getElementById('history-log');
+    const detailsBox = document.getElementById('details-box');
+    const detailsContent = document.getElementById('details-content');
     
-    const totalCost = (needed.pinos + needed.ziplocks + needed.bicarbonato) * PACKAGE_COST;
-
-    db.collection('necessidade_embalagens').add({
-        quantities,
-        needed,
-        totalCost,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-        console.log('Necessidade registrada com sucesso!');
-        Object.values(inputs).forEach(input => input.value = ''); // Limpa os campos
-        calculatePackaging(); // Zera a calculadora
-    }).catch(error => {
-        console.error("Erro ao registrar: ", error);
-        alert("Erro ao salvar. Verifique sua conexão e a configuração do Firebase.");
-    });
-});
-
-// --- CARREGAR HISTÓRICO EM TEMPO REAL ---
-db.collection('necessidade_embalagens').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-    historyLogDiv.innerHTML = '';
-    if (snapshot.empty) {
-        historyLogDiv.innerHTML = '<p>Nenhum registro de necessidade salvo.</p>';
-        return;
+    // --- Funções ---
+    function calculateClicks(total) {
+        if (total === 0) return '';
+        const fullBuys = Math.floor(total / MAX_BUY_AMOUNT);
+        const remainder = total % MAX_BUY_AMOUNT;
+        let result = '';
+        if (fullBuys > 0) result += `${fullBuys}x de ${MAX_BUY_AMOUNT}`;
+        if (remainder > 0) result += (fullBuys > 0 ? ' + ' : '') + `1x de ${remainder}`;
+        return `(${result})`;
     }
 
-    snapshot.docs.forEach(doc => {
-        const data = doc.data();
-        const needed = data.needed;
-        const date = data.timestamp?.toDate().toLocaleString('pt-BR') || 'Salvando...';
-        
-        const entry = document.createElement('p');
-        entry.innerHTML = `<strong>${date}</strong><br>
-                           Pinos: <strong>${needed.pinos}</strong> | 
-                           Ziplocks: <strong>${needed.ziplocks}</strong> | 
-                           Bicarbonato: <strong>${needed.bicarbonato}</strong><br>
-                           Custo Total: <strong>${data.totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong>`;
-        historyLogDiv.appendChild(entry);
-    });
-});
+    function calculatePackaging() {
+        const quantities = { maconha: parseInt(inputs.maconha.value) || 0, crack: parseInt(inputs.crack.value) || 0, cocaina: parseInt(inputs.cocaina.value) || 0, metanfetamina: parseInt(inputs.metanfetamina.value) || 0 };
+        const needed = {
+            pinos: quantities.cocaina * CONVERSION_RATE,
+            ziplocks: (quantities.maconha + quantities.metanfetamina) * CONVERSION_RATE,
+            bicarbonato: quantities.crack * CONVERSION_RATE
+        };
+        const totalCost = (needed.pinos + needed.ziplocks + needed.bicarbonato) * PACKAGE_COST;
 
-// Inicia a calculadora
-calculatePackaging();
+        neededSpans.pinos.textContent = needed.pinos;
+        neededSpans.ziplocks.textContent = needed.ziplocks;
+        neededSpans.bicarbonato.textContent = needed.bicarbonato;
+        clicksSpans.pinos.textContent = calculateClicks(needed.pinos);
+        clicksSpans.ziplocks.textContent = calculateClicks(needed.ziplocks);
+        clicksSpans.bicarbonato.textContent = calculateClicks(needed.bicarbonato);
+        totalCostSpan.textContent = totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        saveButton.disabled = (needed.pinos + needed.ziplocks + needed.bicarbonato) === 0;
+    }
+
+    // --- Event Listeners ---
+    Object.values(inputs).forEach(input => input.addEventListener('input', calculatePackaging));
+
+    saveButton.addEventListener('click', () => {
+        const quantities = { maconha: parseInt(inputs.maconha.value) || 0, crack: parseInt(inputs.crack.value) || 0, cocaina: parseInt(inputs.cocaina.value) || 0, metanfetamina: parseInt(inputs.metanfetamina.value) || 0 };
+        if (Object.values(quantities).reduce((a, b) => a + b, 0) === 0) return;
+
+        const needed = { pinos: quantities.cocaina * CONVERSION_RATE, ziplocks: (quantities.maconha + quantities.metanfetamina) * CONVERSION_RATE, bicarbonato: quantities.crack * CONVERSION_RATE };
+        const totalCost = (needed.pinos + needed.ziplocks + needed.bicarbonato) * PACKAGE_COST;
+
+        db.collection('necessidade_embalagens').add({
+            registradoPor: loggedInUser,
+            quantities, needed, totalCost,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            Object.values(inputs).forEach(input => input.value = '');
+            calculatePackaging();
+        }).catch(error => alert("Erro ao salvar. Verifique as regras do seu Firebase."));
+    });
+
+    // --- Carregar Histórico (com limite de 3) ---
+    db.collection('necessidade_embalagens').orderBy('timestamp', 'desc').limit(3).onSnapshot(snapshot => {
+        historyLogDiv.innerHTML = '';
+        if (snapshot.empty) {
+            historyLogDiv.innerHTML = '<p>Nenhum registo salvo.</p>';
+            return;
+        }
+
+        snapshot.docs.forEach(doc => {
+            const data = doc.data();
+            const totalPackages = data.needed.pinos + data.needed.ziplocks + data.needed.bicarbonato;
+            const entry = document.createElement('p');
+            entry.innerHTML = `<strong>${data.timestamp?.toDate().toLocaleString('pt-BR')}</strong><br>
+                               Por: <strong>${data.registradoPor || 'N/A'}</strong> | Total: <strong>${totalPackages}</strong>`;
+            
+            entry.addEventListener('click', () => {
+                historyLogDiv.querySelectorAll('p').forEach(p => p.classList.remove('selected'));
+                entry.classList.add('selected');
+                
+                detailsContent.innerHTML = `
+                    <p><strong>Registado por:</strong> ${data.registradoPor || 'N/A'}</p>
+                    <p><strong>Data:</strong> ${data.timestamp?.toDate().toLocaleString('pt-BR')}</p>
+                    <p><strong>Custo Total:</strong> ${data.totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    <hr>
+                    <p><strong>Pinos:</strong> ${data.needed.pinos} ${calculateClicks(data.needed.pinos)}</p>
+                    <p><strong>Ziplocks:</strong> ${data.needed.ziplocks} ${calculateClicks(data.needed.ziplocks)}</p>
+                    <p><strong>Bicarbonato:</strong> ${data.needed.bicarbonato} ${calculateClicks(data.needed.bicarbonato)}</p>
+                `;
+            });
+
+            historyLogDiv.appendChild(entry);
+        });
+    });
+
+    calculatePackaging();
+});
