@@ -15,9 +15,8 @@ html, body {
 
 #page-container.blurred {
     filter: blur(5px) brightness(0.7);
-    pointer-events: none; /* Impede cliques no fundo */
+    pointer-events: none;
 }
-
 
 /* Cabeçalho */
 .main-header {
@@ -37,7 +36,6 @@ html, body {
     margin: 5px 0 0;
     color: #a0a0a0;
 }
-
 .header-actions button {
     background: #0e639c;
     color: white;
@@ -52,7 +50,6 @@ html, body {
     background: #d16a6a;
 }
 
-
 /* Grid de Projetos */
 .projects-grid {
     display: grid;
@@ -60,12 +57,6 @@ html, body {
     gap: 30px;
     text-align: center;
 }
-.logged-out-message {
-    grid-column: 1 / -1; /* Ocupa a largura toda */
-    color: #777;
-    font-size: 22px;
-}
-
 .project-card {
     background-color: #252526;
     border: 1px solid #3a3a3a;
@@ -76,7 +67,6 @@ html, body {
     align-items: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .project-card:hover { 
     transform: translateY(-10px); 
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); 
@@ -108,10 +98,7 @@ html, body {
     background-color: #157dc5; 
 }
 
-
-/* ================== */
-/* ESTILOS DO MODAL   */
-/* ================== */
+/* Modal de Login */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -124,7 +111,6 @@ html, body {
     align-items: center;
     z-index: 1000;
 }
-
 .modal-content {
     background-color: #252526;
     padding: 40px;
@@ -133,28 +119,28 @@ html, body {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
     max-width: 400px;
     width: 90%;
-    position: relative;
 }
-
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: #777;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-.modal-content h1 { text-align: center; margin-bottom: 5px; }
-.modal-content .slogan { text-align: center; margin-top: 0; margin-bottom: 30px; font-size: 16px; color: #a0a0a0; }
 .input-group { margin-bottom: 20px; }
 .input-group label { display: block; color: #a0a0a0; margin-bottom: 5px; }
 .input-group input { width: 100%; padding: 12px; border: 1px solid #3a3a3a; border-radius: 5px; background-color: #333333; color: #d4d4d4; box-sizing: border-box; font-size: 16px; }
 .modal-content button[type="submit"] { width: 100%; padding: 15px; background-color: #0e639c; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
 .error-message { color: #d16a6a; text-align: center; margin-top: 15px; height: 20px; }
+.hidden { display: none; }
 
-.hidden {
-    display: none;
+/* ESTILO PARA O RODAPÉ E A FOTO */
+.page-footer {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid #3a3a3a;
+}
+.team-photo-container {
+    text-align: center;
+}
+.team-photo-container img {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid #3a3a3a;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
