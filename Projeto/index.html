@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Projetos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="login-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h1>Acesso Restrito</h1>
+            <p class="slogan">Só quem se arrisca merece viver o extraordinário</p>
+            <form id="pin-form">
+                <div class="input-group">
+                    <label for="pin-input">PIN de Acesso</label>
+                    <input type="password" id="pin-input" required>
+                </div>
+                <button type="submit">Entrar</button>
+                <p id="error-message" class="error-message"></p>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="page-container" class="hidden">
+        <header class="main-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>Central de Projetos</h1>
+                    <p id="welcome-message"></p>
+                </div>
+                 <div class="header-actions">
+                    <button id="logout-button">Sair</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="projects-grid">
+            <div class="project-card">
+                <h2>Controle de Baú</h2>
+                <p>Sistema para registrar a entrada e saída de itens valiosos.</p>
+                <a href="./controle-bau/index.html" class="btn-enter">Entrar no Projeto</a>
+            </div>
+
+            <div class="project-card">
+                <h2>Calculadora de Embalagens</h2>
+                <p>Calcula a necessidade de compra de embalagens e o custo.</p>
+                <a href="./calculadora-embalagens/index.html" class="btn-enter">Entrar no Projeto</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script> 
+</body>
+</html>
