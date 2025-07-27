@@ -27,9 +27,10 @@ html, body {
     flex-direction: column;
 }
 
-.main-column { flex: 1.2; }
-.users-column { flex: 1.5; gap: 20px; }
-.prices-column { flex: 1; } /* Ajustado para 3 colunas */
+/* LARGURAS DAS COLUNAS REAJUSTADAS */
+.main-column { flex: 1.5; }
+.users-column { flex: 2; gap: 20px; }
+.prices-column { flex: 1; } 
 
 
 h2, h3 {
@@ -83,15 +84,14 @@ h2, h3 {
     gap: 10px;
 }
 .button-group.wrap {
-    flex-wrap: wrap; /* Permite que os botões quebrem a linha */
+    flex-wrap: wrap;
 }
 .button-group-single { margin-top: 10px; }
 
 .btn-selector {
-    flex-basis: 30%; /* Para os botões não ficarem muito grandes */
     flex-grow: 1;
     padding: 12px;
-    font-size: 14px; /* Fonte um pouco menor para caber */
+    font-size: 14px;
     border: 1px solid #3a3a3a;
     background-color: #333333;
     color: #d4d4d4;
@@ -170,9 +170,9 @@ h2, h3 {
 .info-box {
     background-color: #1e1e1e;
     border: 1px solid #3a3a3a;
-    padding: 0; /* Removido para a tabela usar o espaço todo */
+    padding: 0;
     border-radius: 5px;
-    overflow: hidden; /* Garante que a tabela respeite as bordas arredondadas */
+    overflow: hidden;
 }
 
 .fish-prices h3 {
@@ -183,9 +183,8 @@ h2, h3 {
 .fish-prices table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 16px;
 }
-/* ESTILO PARA O CABEÇALHO DA TABELA */
 .fish-prices th {
     background-color: #252526;
     padding: 12px 15px;
@@ -200,7 +199,6 @@ h2, h3 {
 .fish-prices tr:last-child td {
     border-bottom: none;
 }
-/* Alinhamento das colunas de valor e peso */
 .fish-prices th:nth-child(2), .fish-prices td:nth-child(2),
 .fish-prices th:nth-child(3), .fish-prices td:nth-child(3) {
     text-align: right;
