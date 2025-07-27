@@ -18,6 +18,7 @@ html, body {
     box-sizing: border-box;
 }
 
+/* Estilo padrão para todas as colunas */
 .column {
     background-color: #252526;
     padding: 20px;
@@ -163,28 +164,32 @@ h2, h3 {
 }
 .back-to-portal-button:hover { background-color: #3a3a3a; transform: scale(1.1); }
 
-/* NOVO ESTILO PARA A TABELA DE PEIXES */
-.info-box {
-    background-color: #1e1e1e;
+/* ESTILO PARA A "COLINHA" DE PREÇOS DOS PEIXES */
+.fish-price-tooltip {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(30, 30, 30, 0.9);
+    color: #a0a0a0;
     border: 1px solid #3a3a3a;
-    padding: 15px;
-    border-radius: 5px;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 12px;
+    line-height: 1.5;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
 }
 
-.fish-prices table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+.fish-price-tooltip p {
+    margin: 2px 0;
+    white-space: pre; /* Mantém o espaçamento para alinhar */
 }
-.fish-prices td {
-    padding: 8px;
-    border-bottom: 1px solid #3a3a3a;
-}
-.fish-prices tr:last-child td {
-    border-bottom: none;
-}
-.fish-prices td:last-child {
-    text-align: right;
+
+.fish-price-tooltip p:first-child {
     font-weight: bold;
-    color: #73c48f;
+    color: #cccccc;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #3a3a3a;
+    padding-bottom: 5px;
 }
