@@ -164,7 +164,7 @@ h2, h3 {
 }
 .back-to-portal-button:hover { background-color: #3a3a3a; transform: scale(1.1); }
 
-/* ESTILO PARA A "COLINHA" DE PREÇOS DOS PEIXES */
+/* ESTILO PARA A "COLINHA" DE PREÇOS (COM TAMANHO AJUSTADO) */
 .fish-price-tooltip {
     position: fixed;
     bottom: 20px;
@@ -173,17 +173,17 @@ h2, h3 {
     color: #a0a0a0;
     border: 1px solid #3a3a3a;
     border-radius: 8px;
-    padding: 10px 15px;
-    font-size: 12px;
-    line-height: 1.5;
+    padding: 15px 20px; /* Mais espaço interno */
+    font-size: 14px;      /* Tamanho da fonte maior */
+    line-height: 1.6;     /* Espaçamento entre linhas maior */
     z-index: 1000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     backdrop-filter: blur(5px);
 }
 
 .fish-price-tooltip p {
-    margin: 2px 0;
-    white-space: pre; /* Mantém o espaçamento para alinhar */
+    margin: 3px 0;
+    white-space: pre;
 }
 
 .fish-price-tooltip p:first-child {
@@ -192,4 +192,5 @@ h2, h3 {
     margin-bottom: 8px;
     border-bottom: 1px solid #3a3a3a;
     padding-bottom: 5px;
+    font-size: 16px; /* Título um pouco maior */
 }
