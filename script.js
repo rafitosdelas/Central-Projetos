@@ -1,23 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =======================================================
-    //   SENHAS ATUALIZADAS
+    //   SENHAS ATUALIZADAS E NOME MUDADO
     // =======================================================
     const userPins = {
         "4150": "Rafitos",
         "6415": "Biel",
-        "4318": "Tiago",
-        "1111": "Visitante" // NOVO UTILIZADOR CONVIDADO
+        "4318": "Tico", // <--- NOME ATUALIZADO
+        "1111": "Visitante"
     };
 
     // =======================================================
-    //   LISTA DE ACESSO (QUEM PODE VER O QUÊ)
+    //   LISTA DE ACESSO ATUALIZADA
     // =======================================================
     const accessRules = {
         "Rafitos": ["Controle de Baú", "Calculadora de Embalagens"],
         "Biel": ["Controle de Baú", "Calculadora de Embalagens"],
-        "Tiago": ["Calculadora de Embalagens"],
-        "Visitante": ["Controle de Baú", "Calculadora de Embalagens"] // PODE VER TUDO
+        "Tico": ["Calculadora de Embalagens"], // <--- NOME ATUALIZADO
+        "Visitante": ["Controle de Baú", "Calculadora de Embalagens"]
     };
 
     // Detalhes dos projetos
