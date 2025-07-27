@@ -3,26 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Baú</title>
+    <title>Central de Projetos</title>
     <link rel="stylesheet" href="style.css">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
-    <link rel="manifest" href="../assets/icons/site.webmanifest">
-
-    <script src="../auth-check.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="assets/icons/site.webmanifest">
 </head>
 <body>
 
-    <a href="../index.html" class="back-to-portal-button">↩</a>
-
-    <div class="container">
+    <div id="login-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h1>Acesso Restrito</h1>
+            <p class="slogan">Só quem se arrisca merece viver o extraordinário</p>
+            <form id="pin-form">
+                <div class="input-group">
+                    <label for="pin-input">PIN de Acesso</label>
+                    <input type="password" id="pin-input" required>
+                </div>
+                <button type="submit">Entrar</button>
+                <p id="error-message" class="error-message"></p>
+            </form>
         </div>
+    </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="script.js"></script>
 
+    <div id="page-container" class="hidden">
+        <header class="main-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>Central de Projetos</h1>
+                    <p id="welcome-message"></p>
+                </div>
+                 <div class="header-actions">
+                    <button id="logout-button">Sair</button>
+                </div>
+            </div>
+        </header>
+
+        <main id="projects-grid" class="projects-grid">
+            </main>
+
+        <footer class="page-footer">
+            <div class="team-photo-container">
+                <img src="assets/images/membros.png" alt="Foto dos Membros">
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script> 
 </body>
 </html>
