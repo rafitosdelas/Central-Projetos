@@ -10,7 +10,7 @@ html, body {
 .container {
     display: flex;
     gap: 25px;
-    max-width: 1400px;
+    max-width: 1600px; /* Aumentado para caber 3 colunas */
     margin: auto;
     padding: 20px;
     padding-top: 70px;
@@ -28,8 +28,10 @@ html, body {
     flex-direction: column;
 }
 
+/* NOVOS TAMANHOS PARA AS 3 COLUNAS */
 .main-column { flex: 1.2; }
 .users-column { flex: 1.5; gap: 20px; }
+.prices-column { flex: 0.8; } /* Coluna mais fina */
 
 
 h2, h3 {
@@ -164,33 +166,37 @@ h2, h3 {
 }
 .back-to-portal-button:hover { background-color: #3a3a3a; transform: scale(1.1); }
 
-/* ESTILO PARA A "COLINHA" DE PREÇOS (COM TAMANHO AJUSTADO) */
-.fish-price-tooltip {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgba(30, 30, 30, 0.9);
-    color: #a0a0a0;
+/* NOVO ESTILO PARA A TABELA DE PEIXES (DENTRO DA COLUNA) */
+.info-box {
+    background-color: #1e1e1e;
     border: 1px solid #3a3a3a;
-    border-radius: 8px;
-    padding: 15px 20px; /* Mais espaço interno */
-    font-size: 14px;      /* Tamanho da fonte maior */
-    line-height: 1.6;     /* Espaçamento entre linhas maior */
-    z-index: 1000;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    backdrop-filter: blur(5px);
+    padding: 15px;
+    border-radius: 5px;
 }
 
-.fish-price-tooltip p {
-    margin: 3px 0;
-    white-space: pre;
+.fish-prices {
+    padding: 0; /* Remove padding extra para a tabela encaixar */
 }
 
-.fish-price-tooltip p:first-child {
-    font-weight: bold;
-    color: #cccccc;
-    margin-bottom: 8px;
+.fish-prices h3 {
+    padding: 20px;
+    margin: 0;
+}
+
+.fish-prices table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px; /* Tamanho maior */
+}
+.fish-prices td {
+    padding: 12px 20px; /* Mais espaçamento */
     border-bottom: 1px solid #3a3a3a;
-    padding-bottom: 5px;
-    font-size: 16px; /* Título um pouco maior */
+}
+.fish-prices tr:last-child td {
+    border-bottom: none;
+}
+.fish-prices td:last-child {
+    text-align: right;
+    font-weight: bold;
+    color: #73c48f;
 }
