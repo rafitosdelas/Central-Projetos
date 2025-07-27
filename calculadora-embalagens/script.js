@@ -44,14 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const PACKAGE_COST = 5;
     const MAX_BUY_AMOUNT = 50;
     const PACKAGE_WEIGHT = 0.01;
-    const FINAL_PRODUCT_PRICE = 98; // <--- NOVA CONSTANTE DE PREÇO
+    const FINAL_PRODUCT_PRICE = 98;
 
     // --- Mais Referências do DOM ---
     const neededSpans = { pinos: document.getElementById('pinos-needed'), ziplocks: document.getElementById('ziplocks-needed'), bicarbonato: document.getElementById('bicarbonato-needed') };
     const clicksSpans = { pinos: document.getElementById('pinos-clicks'), ziplocks: document.getElementById('ziplocks-clicks'), bicarbonato: document.getElementById('bicarbonato-clicks') };
     const totalCostSpan = document.getElementById('total-cost');
     const totalWeightSpan = document.getElementById('total-weight');
-    const estimatedValueSpan = document.getElementById('estimated-value'); // <--- NOVA REFERÊNCIA
+    const estimatedValueSpan = document.getElementById('estimated-value');
     const historyLogDiv = document.getElementById('history-log');
     const detailsBox = document.getElementById('details-box');
     const detailsContent = document.getElementById('details-content');
@@ -82,21 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalPackages = needed.pinos + needed.ziplocks + needed.bicarbonato;
         const totalCost = totalPackages * PACKAGE_COST;
         const totalWeight = totalPackages * PACKAGE_WEIGHT;
-        const estimatedValue = totalPackages * FINAL_PRODUCT_PRICE; // <--- CÁLCULO DO VALOR
+        const estimatedValue = totalPackages * FINAL_PRODUCT_PRICE;
 
-        // Atualiza a interface
         neededSpans.pinos.textContent = needed.pinos;
         neededSpans.ziplocks.textContent = needed.ziplocks;
         neededSpans.bicarbonato.textContent = needed.bicarbonato;
-        
         clicksSpans.pinos.textContent = calculateClicks(needed.pinos);
         clicksSpans.ziplocks.textContent = calculateClicks(needed.ziplocks);
         clicksSpans.bicarbonato.textContent = calculateClicks(needed.bicarbonato);
-
         totalCostSpan.textContent = totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         totalWeightSpan.textContent = `${totalWeight.toFixed(2)} kg`;
-        estimatedValueSpan.textContent = estimatedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); // <--- ATUALIZA O VALOR
-
+        estimatedValueSpan.textContent = estimatedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         if (loggedInUser !== 'Visitante') {
             saveButton.disabled = totalPackages === 0;
         }
@@ -141,18 +137,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 historyLogDiv.querySelectorAll('p').forEach(p => p.classList.remove('selected'));
                 entry.classList.add('selected');
                 
+                // **A MÁGICA ACONTECE AQUI**
+                let registeredItemsHTML = '<p><strong>Itens Registados:</strong></p>';
+                if (data.quantities.peDeMaconha > 0) registeredItemsHTML += `<p>- Pé de Maconha: ${data.quantities.peDeMaconha}</p>`;
+                if (data.quantities.pastaBase > 0) registeredItemsHTML += `<p>- Pasta Base: ${data.quantities.pastaBase}</p>`;
+                if (data.quantities.plantaCoca > 0) registeredItemsHTML += `<p>- Planta de Coca: ${data.quantities.plantaCoca}</p>`;
+                if (data.quantities.anfetamina > 0) registeredItemsHTML += `<p>- Anfetamina: ${data.quantities.anfetamina}</p>`;
+                
                 const totalWeightOfEntry = totalPackages * PACKAGE_WEIGHT;
-                const estimatedValueOfEntry = totalPackages * FINAL_PRODUCT_PRICE; // <--- CÁLCULO PARA O HISTÓRICO
+                const estimatedValueOfEntry = totalPackages * FINAL_PRODUCT_PRICE;
                 detailsContent.innerHTML = `
                     <p><strong>Registado por:</strong> ${data.registradoPor || 'N/A'}</p>
                     <p><strong>Data:</strong> ${data.timestamp?.toDate().toLocaleString('pt-BR')}</p>
+                    <hr>
+                    ${registeredItemsHTML}
+                    <hr>
                     <p><strong>Valor de Venda:</strong> ${estimatedValueOfEntry.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     <p><strong>Custo Embalagens:</strong> ${data.totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     <p><strong>Peso Total:</strong> ${totalWeightOfEntry.toFixed(2)} kg</p>
-                    <hr>
-                    <p><strong>Pinos:</strong> ${data.needed.pinos} ${calculateClicks(data.needed.pinos)}</p>
-                    <p><strong>Ziplocks:</strong> ${data.needed.ziplocks} ${calculateClicks(data.needed.ziplocks)}</p>
-                    <p><strong>Bicarbonato:</strong> ${data.needed.bicarbonato} ${calculateClicks(data.needed.bicarbonato)}</p>
                 `;
             });
 
