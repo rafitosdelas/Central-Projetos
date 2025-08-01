@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const accessRules = {
         "Rafitos": ["Controle de Baú", "Calculadora de Embalagens"],
         "Biel": ["Controle de Baú", "Calculadora de Embalagens"],
-        "Tico": ["Calculadora de Embalagens"], // <--- NOME ATUALIZADO
+        "Tico": ["Calculadora de Embalagens", "Controle de Baú"], // <--- NOME ATUALIZADO E ACESSO ADICIONADO
         "Visitante": ["Controle de Baú", "Calculadora de Embalagens"]
     };
 

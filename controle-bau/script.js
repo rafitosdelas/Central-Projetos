@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionSelector = document.getElementById('action-selector');
     const itemSelector = document.getElementById('item-selector');
     const quantityInput = document.getElementById('item-quantity');
-    const submitButton = itemForm.querySelector('button[type="submit"]');
+    const submitButton = itemForm.querySelector('button[type="submit"');
 
     // Mapeamento dos painéis de utilizador
     const userPanels = {
@@ -46,11 +46,17 @@ document.addEventListener('DOMContentLoaded', () => {
             filesValue: document.getElementById('rafitos-files-value'),
             grandTotal: document.getElementById('rafitos-grand-total'),
             finalWashed: document.getElementById('rafitos-final-washed-value')
+        },
+        Tico: { // NOVO PAINEL PARA O TICO
+            itemsDiv: document.getElementById('tico-items'),
+            filesValue: document.getElementById('tico-files-value'),
+            grandTotal: document.getElementById('tico-grand-total'),
+            finalWashed: document.getElementById('tico-final-washed-value')
         }
     };
 
     // Inventários
-    let inventories = { Biel: {}, Rafitos: {} };
+    let inventories = { Biel: {}, Rafitos: {}, Tico: {} }; // Adicionado Tico ao inventário inicial
 
     // --- LÓGICA DE VISITANTE E BOAS-VINDAS ---
     if (loggedInUser) {
@@ -115,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ATUALIZAÇÃO EM TEMPO REAL ---
 
     db.collection('transacoes').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
-        inventories = { Biel: {}, Rafitos: {} };
+        inventories = { Biel: {}, Rafitos: {}, Tico: {} }; // Resetar inventários incluindo Tico
 
         snapshot.docs.forEach(doc => {
             const t = doc.data();
